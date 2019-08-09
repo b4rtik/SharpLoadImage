@@ -4,7 +4,7 @@ Hide assembly into png images
 
 SharpImage small tool to embed .Net assembly on it, useful to hide traffic of an implant.
 
-The main code is a port of [Invoke-PSImage](https://github.com/peewpw/Invoke-PSImage) .
+The main code is a porting of [Invoke-PSImage](https://github.com/peewpw/Invoke-PSImage) .
 
 ```
 usage: SharpLoadImage -a [path to assembly] -i [path to image source] -o [path to output file]
