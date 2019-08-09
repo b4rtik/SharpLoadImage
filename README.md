@@ -1,4 +1,4 @@
-#SharpImage#
+# SharpImage
 
 Hide assembly into png images
 
