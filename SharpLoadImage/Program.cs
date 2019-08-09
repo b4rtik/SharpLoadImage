@@ -101,7 +101,6 @@ namespace SharpLoadImage
                 img.Save(outputfile, ImageFormat.Png);
                 img.Dispose();
 
-                //Get a bunch of numbers we need to use in the oneliner
                 int rows = (int)Math.Ceiling((decimal)payload.Length / width);
                 int array = (rows * width);
 
