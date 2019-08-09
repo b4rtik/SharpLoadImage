@@ -18,16 +18,26 @@ namespace SharpLoadImage
 {
     class Program
     {
+        static void ShowHelp(OptionSet p)
+        {
+            Console.WriteLine("usage: SharpLoadImage -a [path to assembly] -i [path to image source] -o [path to output file]");
+            Console.WriteLine();
+            Console.WriteLine("Options:");
+            p.WriteOptionDescriptions(Console.Out);
+        }
+
         static void Main(string[] args)
         {
             string assemblypath = "";
             string image = "";
             string outputfile = "";
+            bool showHelp = false;
             
             var p = new OptionSet() {
                 { "a|assembly=", "Assembly to hide.\n", v => assemblypath = v },
                 { "i|image=", "Image src.", v => image = v },
-                { "o|output=", "Output file", v => outputfile = v }
+                { "o|output=", "Output file", v => outputfile = v },
+                { "h|help",  "Show this message and exit.", v => showHelp = v != null },
             };
 
             try
@@ -40,6 +50,12 @@ namespace SharpLoadImage
                 {
                     Console.WriteLine(e.Message);
                     Console.WriteLine("Try '--help' for more information.");
+                    return;
+                }
+
+                if (showHelp)
+                {
+                    ShowHelp(p);
                     return;
                 }
 
